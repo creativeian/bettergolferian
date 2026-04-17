@@ -1,0 +1,502 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:var(--font-sans);background:#1a3a2a;border-radius:16px;overflow:hidden;max-width:440px;margin:0 auto;min-height:600px}
+.hdr{background:#1a3a2a;border-bottom:1px solid rgba(200,168,75,0.3);padding:14px 18px 0}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.logo{font-size:15px;font-weight:500;color:#fefefe}.logo span{color:#c8a84b}
+.sub{font-size:9px;color:#7ab88a;letter-spacing:2px;margin-top:2px}
+.hcp-badge{text-align:right}
+.hcp-val{font-size:22px;font-weight:500;color:#e8c96a;line-height:1}
+.hcp-lbl{font-size:8px;color:#8a8a8a;letter-spacing:1px}
+.sync-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4a8c5c;margin-right:4px;vertical-align:middle}
+.sync-lbl{font-size:8px;color:#7ab88a;letter-spacing:1px}
+.nav{display:flex;gap:0;overflow-x:auto;padding-bottom:0;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.tab{background:transparent;border:none;cursor:pointer;font-size:9px;letter-spacing:1.5px;padding:9px 13px;color:#8a8a8a;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s}
+.tab.on{color:#c8a84b;border-bottom:2px solid #c8a84b}
+.body{background:#1e4030;padding:16px;min-height:520px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.kpi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 8px;text-align:center}
+.kv{font-size:20px;font-weight:500;color:#e8c96a;line-height:1}
+.kl{font-size:8px;color:#8a8a8a;letter-spacing:1px;margin-top:4px}
+.ks{font-size:9px;color:#7ab88a;margin-top:2px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.ct{font-size:14px;font-weight:500;color:#fefefe;margin-bottom:4px}
+.cs{font-size:8px;color:#8a8a8a;letter-spacing:2px;margin-bottom:12px}
+.inp{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:7px;color:#f5f0e8;font-size:13px;padding:8px 10px;width:100%;outline:none;font-family:var(--font-sans)}
+.inp:focus{border-color:rgba(200,168,75,0.5)}
+.lbl{font-size:9px;letter-spacing:2px;color:#8a8a8a;display:block;margin-bottom:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.full{grid-column:1/-1}
+.savebtn{background:#c8a84b;color:#1a3a2a;border:none;border-radius:8px;font-size:10px;letter-spacing:2px;font-weight:500;padding:11px;width:100%;cursor:pointer;margin-top:4px;transition:opacity 0.15s}
+.savebtn:hover{opacity:0.88}
+.savebtn.syncing{background:#2d5a3d;color:#7ab88a}
+.pill{display:inline-block;font-size:8px;letter-spacing:1.5px;background:rgba(200,168,75,0.2);color:#c8a84b;padding:2px 7px;border-radius:20px;margin-bottom:5px}
+.goalbox{background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.3);border-radius:9px;padding:10px 13px;margin-bottom:14px;font-size:11px;color:#f5f0e8}
+.wkbtn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:7px;font-size:11px;padding:6px 11px;cursor:pointer;margin:3px;color:#8a8a8a;transition:all 0.15s;position:relative}
+.wkbtn.on{background:#c8a84b;color:#1a3a2a;border-color:#c8a84b}
+.wkdot{position:absolute;top:-3px;right:-3px;width:7px;height:7px;background:#4a8c5c;border-radius:50%}
+.wrow{display:grid;grid-template-columns:36px 1fr 48px 52px;gap:6px;align-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 10px;margin-bottom:5px}
+.wn{font-size:10px;font-weight:500;color:#c8a84b}
+.wg{font-size:9px;color:#8a8a8a}
+.ws{font-size:13px;font-weight:500;color:#f5f0e8;text-align:center}
+.wst{font-size:9px;color:#7ab88a;text-align:right}
+.br{margin-bottom:8px}
+.brl{display:flex;justify-content:space-between;font-size:10px;color:#f5f0e8;margin-bottom:3px}
+.brp{color:#c8a84b}
+.brt{height:6px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden}
+.brf{height:100%;border-radius:6px;transition:width 0.6s ease}
+.drill-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.dtab{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;font-size:10px;padding:5px 12px;cursor:pointer;color:#8a8a8a;transition:all 0.15s}
+.dtab.on{background:rgba(200,168,75,0.2);border-color:rgba(200,168,75,0.4);color:#c8a84b}
+.dcard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.dtitle{font-size:13px;font-weight:500;color:#fefefe;margin-bottom:3px}
+.dmeta{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.dtag{font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:20px}
+.dsteps{list-style:none;padding:0}
+.dstep{font-size:11px;color:rgba(245,240,232,0.75);padding:3px 0 3px 14px;position:relative;line-height:1.5}
+.dstep::before{content:"→";position:absolute;left:0;color:#c8a84b;font-size:10px}
+.dkey{font-size:10px;color:#7ab88a;margin-top:6px;font-style:italic}
+.scard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:10px 12px;margin-bottom:7px}
+.smeta{display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap}
+.stag{font-size:8px;letter-spacing:1px;background:rgba(200,168,75,0.2);color:#c8a84b;padding:2px 6px;border-radius:20px}
+.ms{display:grid;grid-template-columns:52px 1fr 28px;gap:10px;align-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 14px;margin-bottom:8px}
+.ms.done{background:rgba(74,140,92,0.12);border-color:rgba(74,140,92,0.35)}
+.mhcp{font-size:22px;font-weight:500;color:#c8a84b;text-align:center}
+.ml{font-size:12px;color:#fefefe;font-weight:500;margin-bottom:2px}
+.msub{font-size:10px;color:#8a8a8a;font-style:italic}
+.setup-card{background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.3);border-radius:12px;padding:16px;margin-bottom:12px}
+.setup-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:#c8a84b;color:#1a3a2a;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-title{font-size:13px;font-weight:500;color:#fefefe;margin-bottom:3px}
+.step-desc{font-size:11px;color:rgba(245,240,232,0.7);line-height:1.6}
+.step-url{font-size:10px;color:#c8a84b;word-break:break-all;margin-top:4px;font-style:italic}
+</style>
+
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div>
+        <div class="logo">&#9971; <span>Ian's</span> Golf Tracker</div>
+        <div class="sub">DADS LINK AND GOLF · 27.0 → 12–16</div>
+      </div>
+      <div class="hcp-badge">
+        <div class="hcp-val" id="hcp-disp">27.0</div>
+        <div class="hcp-lbl" style="display:flex;align-items:center;gap:3px;justify-content:flex-end">
+          <span class="sync-dot" id="sync-dot"></span>
+          <span class="sync-lbl" id="sync-lbl">LOCAL</span>
+        </div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="tab on" onclick="go('dash',this)">DASHBOARD</button>
+      <button class="tab" onclick="go('log',this)">LOG ROUND</button>
+      <button class="tab" onclick="go('drills',this)">DRILLS</button>
+      <button class="tab" onclick="go('practice',this)">PRACTICE</button>
+      <button class="tab" onclick="go('milestones',this)">GOALS</button>
+      <button class="tab" onclick="go('setup',this)">SHEETS SETUP</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- DASHBOARD -->
+    <div id="p-dash">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kv" id="k-hcp">27.0</div><div class="kl">CURRENT HCP</div><div class="ks">→ 12–16</div></div>
+        <div class="kpi"><div class="kv" id="k-rds">0</div><div class="kl">ROUNDS</div></div>
+        <div class="kpi"><div class="kv" id="k-best">—</div><div class="kl">BEST SCORE</div></div>
+        <div class="kpi"><div class="kv" id="k-avg">—</div><div class="kl">AVG SCORE</div></div>
+        <div class="kpi"><div class="kv" id="k-putts">—</div><div class="kl">AVG PUTTS</div></div>
+        <div class="kpi"><div class="kv" id="k-sess">0</div><div class="kl">SESSIONS</div></div>
+      </div>
+      <div class="card" id="dist-card" style="display:none">
+        <div class="ct">Scoring distribution</div>
+        <div class="cs">ACROSS ALL ROUNDS LOGGED</div>
+        <div id="dist-bars"></div>
+      </div>
+      <div class="card">
+        <div class="ct">12-week overview</div>
+        <div class="cs">TAP "LOG ROUND" TO ENTER YOUR STATS</div>
+        <div id="week-rows"></div>
+      </div>
+    </div>
+
+    <!-- LOG ROUND -->
+    <div id="p-log" style="display:none">
+      <div class="ct" style="color:#fefefe;margin-bottom:12px;font-size:16px">Log a round</div>
+      <div style="margin-bottom:14px">
+        <div class="lbl" style="margin-bottom:6px">SELECT WEEK</div>
+        <div id="wk-btns"></div>
+      </div>
+      <div class="goalbox"><span class="pill" id="phase-pill">WK 1 · FOUNDATION</span><br><span id="goal-txt">No triples · 6 practice sessions</span></div>
+      <div class="card">
+        <div class="row2">
+          <div class="full"><label class="lbl">DATE</label><input class="inp" type="date" id="f-date"></div>
+          <div><label class="lbl">SCORE</label><input class="inp" type="number" placeholder="99" id="f-score"></div>
+          <div><label class="lbl">GIR (OF 18)</label><input class="inp" type="number" placeholder="2" id="f-gir"></div>
+          <div><label class="lbl">TOTAL PUTTS</label><input class="inp" type="number" placeholder="36" id="f-putts"></div>
+          <div><label class="lbl">TRIPLES+</label><input class="inp" type="number" placeholder="5" id="f-trp"></div>
+          <div><label class="lbl">DOUBLES</label><input class="inp" type="number" placeholder="6" id="f-dbl"></div>
+          <div><label class="lbl">BOGEYS</label><input class="inp" type="number" placeholder="5" id="f-bog"></div>
+          <div><label class="lbl">PARS+</label><input class="inp" type="number" placeholder="2" id="f-par"></div>
+          <div class="full"><label class="lbl" style="color:rgba(200,168,75,0.8)">HCP INDEX (FROM GHIN)</label><input class="inp" type="number" step="0.1" placeholder="27.0" id="f-hcp" style="border-color:rgba(200,168,75,0.35)"></div>
+          <div class="full"><label class="lbl">NOTES</label><textarea class="inp" rows="2" id="f-notes" placeholder="What clicked? What broke down?" style="resize:none"></textarea></div>
+          <div class="full"><button class="savebtn" id="save-round-btn" onclick="saveRound()">&#9971; Save round</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRILLS -->
+    <div id="p-drills" style="display:none">
+      <div class="ct" style="color:#fefefe;margin-bottom:4px;font-size:16px">Practice drill library</div>
+      <div class="cs" style="margin-bottom:12px;font-size:8px;letter-spacing:2px;color:#8a8a8a">PHASE-APPROPRIATE DRILLS FOR YOUR GAME</div>
+      <div class="drill-tabs" id="drill-cat-tabs"></div>
+      <div id="drill-list"></div>
+    </div>
+
+    <!-- PRACTICE LOG -->
+    <div id="p-practice" style="display:none">
+      <div class="ct" style="color:#fefefe;margin-bottom:12px;font-size:16px">Practice log</div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:12px">Log session</div>
+        <div class="row2">
+          <div><label class="lbl">FOCUS</label>
+            <select class="inp" id="p-focus" style="appearance:none">
+              <option>Short Game</option><option>Putting</option><option>Full Swing</option>
+              <option>Bunker</option><option>Course Round</option><option>Mental Game</option><option>Fitness</option>
+            </select>
+          </div>
+          <div><label class="lbl">DURATION (MIN)</label><input class="inp" type="number" placeholder="45" id="p-dur"></div>
+          <div class="full"><label class="lbl">LOCATION</label><input class="inp" placeholder="Rancho Park Range" id="p-loc"></div>
+          <div class="full"><label class="lbl">DRILLS DONE</label><input class="inp" placeholder="Gate drill, lag putting..." id="p-drills"></div>
+          <div class="full"><label class="lbl">NOTES</label><textarea class="inp" rows="2" id="p-notes" placeholder="What improved? What needs work?" style="resize:none"></textarea></div>
+          <div class="full"><button class="savebtn" id="save-sess-btn" onclick="saveSess()">&#127948; Log session</button></div>
+        </div>
+      </div>
+      <div id="sess-hist"></div>
+    </div>
+
+    <!-- MILESTONES -->
+    <div id="p-milestones" style="display:none">
+      <div class="ct" style="color:#fefefe;margin-bottom:14px;font-size:16px">Milestone tracker</div>
+      <div id="ms-list"></div>
+      <div class="card" style="margin-top:14px">
+        <div class="ct" style="margin-bottom:12px">Phase roadmap</div>
+        <div style="background:rgba(74,140,92,0.15);border:1px solid rgba(74,140,92,0.35);border-radius:9px;padding:10px 13px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;letter-spacing:2px;color:#c8a84b">PHASE 1 · FOUNDATION</span><span style="font-size:9px;color:#8a8a8a">WKS 1–3</span></div>
+          <div style="font-size:12px;color:#e8c96a;font-weight:500;margin-bottom:2px">27 → 22 HCP</div>
+          <div style="font-size:10px;color:rgba(245,240,232,0.7)">Eliminate triples · Score &lt;95 · 6 sessions/week</div>
+        </div>
+        <div style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.3);border-radius:9px;padding:10px 13px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;letter-spacing:2px;color:#c8a84b">PHASE 2 · BUILD</span><span style="font-size:9px;color:#8a8a8a">WKS 4–6</span></div>
+          <div style="font-size:12px;color:#e8c96a;font-weight:500;margin-bottom:2px">22 → 19 HCP</div>
+          <div style="font-size:10px;color:rgba(245,240,232,0.7)">Par 3 avg &lt;4.2 · Score &lt;91 · Driver consistency</div>
+        </div>
+        <div style="background:rgba(44,74,110,0.2);border:1px solid rgba(44,74,110,0.45);border-radius:9px;padding:10px 13px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;letter-spacing:2px;color:#c8a84b">PHASE 3 · SHARPEN</span><span style="font-size:9px;color:#8a8a8a">WKS 7–9</span></div>
+          <div style="font-size:12px;color:#e8c96a;font-weight:500;margin-bottom:2px">19 → 16 HCP</div>
+          <div style="font-size:10px;color:rgba(245,240,232,0.7)">Break 90 · GIR ≥ 3/round · Up-and-down 25%</div>
+        </div>
+        <div style="background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.35);border-radius:9px;padding:10px 13px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;letter-spacing:2px;color:#c8a84b">PHASE 4 · SUSTAIN</span><span style="font-size:9px;color:#8a8a8a">WKS 10–12</span></div>
+          <div style="font-size:12px;color:#e8c96a;font-weight:500;margin-bottom:2px">16 → 12 HCP</div>
+          <div style="font-size:10px;color:rgba(245,240,232,0.7)">Break 85 · 30% pars · Play competitive rounds</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHEETS SETUP -->
+    <div id="p-setup" style="display:none">
+      <div class="ct" style="color:#fefefe;margin-bottom:4px;font-size:16px">Connect Google Sheets</div>
+      <div style="font-size:11px;color:#8a8a8a;margin-bottom:14px">One-time 10-minute setup. Every round and session saves to your Sheet automatically.</div>
+      <div class="setup-card">
+        <div class="setup-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Create your Google Sheet</div>
+            <div class="step-desc">Go to sheets.google.com → click "+" to create a blank sheet. Name it "Ian's Golf Tracker". Add 3 tabs: <em>weekly_log</em>, <em>practice_log</em>, <em>profile</em>.</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Open Apps Script</div>
+            <div class="step-desc">In your Sheet: Extensions → Apps Script. Delete any default code. Paste the Apps Script code below (tap to copy).</div>
+            <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 10px;margin-top:6px;cursor:pointer" onclick="copyScript()">
+              <div style="font-size:8px;color:#c8a84b;letter-spacing:2px;margin-bottom:4px" id="copy-lbl">TAP TO COPY APPS SCRIPT CODE</div>
+              <div style="font-size:9px;color:#7ab88a;font-family:monospace">function doPost(e){...}<br>function doGet(e){...}</div>
+            </div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Deploy as web app</div>
+            <div class="step-desc">In Apps Script: Deploy → New deployment → Web app. Set "Execute as: Me" and "Who has access: Anyone". Click Deploy → copy the URL.</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Paste your URL here</div>
+            <div class="step-desc">Once you have your deployment URL, paste it below and hit Connect.</div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <input class="inp" id="sheet-url" placeholder="https://script.google.com/macros/s/..." style="flex:1;font-size:11px">
+              <button class="savebtn" onclick="connectSheet()" style="width:auto;padding:8px 14px;margin:0;font-size:9px">CONNECT</button>
+            </div>
+            <div id="connect-status" style="font-size:10px;margin-top:6px;color:#7ab88a"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:8px">Current sync status</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#f5f0e8;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.08)">
+          <span style="color:#8a8a8a">Mode</span>
+          <span id="mode-disp">Local only (no Sheet connected)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#f5f0e8;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.08)">
+          <span style="color:#8a8a8a">Rounds synced</span>
+          <span id="sync-rounds">0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#f5f0e8;padding:6px 0">
+          <span style="color:#8a8a8a">Sessions synced</span>
+          <span id="sync-sess">0</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const GOALS=['No triples · 6 practice sessions','Score < 97 · short game 2x','Score < 95 · track all stats','GIR 2+ · avg putts < 36','Score < 93 · fairways > 6','Eliminate triples · score < 91','Up-and-down 25% · 6 sessions','Score < 89 · GIR 3+','Break 90 · pars 4+/round','Score < 88 · HCP < 19','Consistent 85-88 · GIR 4+','Break 85 · HCP 16 or better']
+const PHASES={1:'Foundation',4:'Build',7:'Sharpen',10:'Sustain'}
+const MS_DATA=[
+  {hcp:'27.0',label:'Starting point',sub:'GHIN registered · first round logged'},
+  {hcp:'24.0',label:'Triples becoming rare',sub:'Zero triples in 2 consecutive rounds'},
+  {hcp:'22.0',label:'Breaking 95 consistently',sub:'3 rounds under 95 in a month'},
+  {hcp:'19.0',label:'Short game is a weapon',sub:'Up-and-down 30%+ over 5 rounds'},
+  {hcp:'16.0',label:'Breaking 90',sub:'First round at or below 90'},
+  {hcp:'12–16',label:'Target achieved',sub:'30% pars · consistent 83-87 rounds'},
+]
+const DRILLS={
+  'Short Game':[
+    {title:'Clock drill',time:'15 min',phase:'All phases',tags:['Chipping','Distance control'],steps:['Place 4 balls at 3, 6, 9, and 12 o\'clock positions 10ft from hole','Chip each to land on the green and stop within 3ft','Complete full clock without missing twice in a row','Progress: tighten the target circle week by week'],key:'Builds precision touch — most 27-HCP strokes are lost within 50 yards'},
+    {title:'Bump and run ladder',time:'20 min',phase:'Phase 1–2',tags:['Chipping','Trajectory'],steps:['Use a 7-iron or 8-iron for low running chip','Set targets at 10, 20, and 30 yards','Hit 5 balls to each distance, track how many stop within a club-length','Switch to pitching wedge and repeat'],key:'Learn to use less loft — most beginners over-loft and lose distance control'},
+    {title:'Up-and-down challenge',time:'25 min',phase:'Phase 2–3',tags:['Chipping','Scoring'],steps:['Drop 5 balls in rough around green from different angles','Chip then putt out each one — count how many are 2-shots or fewer','Track your up-and-down %: aim for 25% in Phase 2, 35% in Phase 3','Rotate positions to simulate real on-course situations'],key:'This directly converts bogeys to pars — highest ROI drill in the bag'},
+  ],
+  'Putting':[
+    {title:'Gate drill (6-footer)',time:'15 min',phase:'Phase 1–4',tags:['Putting','Alignment'],steps:['Place two tees 1 inch wider than your putter head, 6 feet from hole','Stroke through the gate without touching either tee','Make 10 consecutive before moving on','Progress: narrow the gate by 0.5 inches each week'],key:'The #1 putting drill for consistency — forces a square face at impact'},
+    {title:'Lag putting ladder',time:'20 min',phase:'Phase 1–4',tags:['Putting','Distance control'],steps:['Place balls at 20, 30, 40, and 50 feet from hole','Putt each — goal is to stop within 3 feet (a "tap-in zone")','Count how many you leave within the zone out of 12 putts','Target: 8/12 to move to next phase'],key:'3-putts are killing your score. This eliminates them by building distance feel'},
+    {title:'Circle of death',time:'10 min',phase:'Phase 2–4',tags:['Putting','Pressure'],steps:['Place 8 balls in a circle 4 feet from the hole','Make all 8 in a row — if you miss, start over','Once you make all 8, move circle to 5 feet and repeat','Simulates tournament pressure on short putts'],key:'Short putt misses are the most demoralizing. Build the habit under pressure'},
+    {title:'One-handed drill',time:'10 min',phase:'Phase 2–4',tags:['Putting','Feel'],steps:['Putt 10 balls with dominant hand only from 6 feet','Then switch to non-dominant hand only for 10 more','Finish with two-handed strokes — feel the difference','Great for identifying which hand is taking over your stroke'],key:'Teaches your hands what a good stroke actually feels like'},
+  ],
+  'Full Swing':[
+    {title:'9-shot shape drill',time:'30 min',phase:'Phase 2–4',tags:['Ball striking','Control'],steps:['Hit 3 shots: low, medium, high trajectory with a 7-iron','Then 3 shots: straight, draw, fade with same club','Combine: hit low draw, high fade, medium straight etc.','Track which shapes you can execute consistently'],key:'Forces you to control your ball flight — reveals what shots you actually own'},
+    {title:'Impact bag or towel drill',time:'15 min',phase:'Phase 1–2',tags:['Impact','Fundamentals'],steps:['Place a rolled towel 2 inches behind the ball at address','Practice hitting the ball without touching the towel first','This eliminates the "casting" move that causes fat shots','20 reps with each iron — focus on forward shaft lean at impact'],key:'Fat shots from early release cost you more strokes than anything at 27 HCP'},
+    {title:'Tempo metronome drill',time:'20 min',phase:'Phase 1–4',tags:['Tempo','Consistency'],steps:['Use a free metronome app — set to 60 BPM','Backswing on beat 1, downswing on beat 2, follow-through by beat 3','Hit 20 balls in rhythm before going back to normal tempo','Ideal 3:1 backswing-to-downswing ratio builds repeatable swing'],key:'Rushing the downswing is the #1 swing fault at your handicap level'},
+    {title:'100-yard wedge station',time:'25 min',phase:'Phase 2–4',tags:['Wedge','Scoring zone'],steps:['Pick your gap wedge or sand wedge — know your exact distance','Hit 20 balls to a 100-yard target, tracking how many within 20ft','Then hit 10 with 3/4 swing, 10 with full swing — compare dispersion','Work the same drill at 75 yards and 50 yards'],key:'Shots from 50-100 yards determine your score more than any other range'},
+  ],
+  'Putting':[],
+  'Bunker':[
+    {title:'Line in the sand',time:'20 min',phase:'Phase 2–4',tags:['Bunker','Technique'],steps:['Draw a line in the sand 2 inches behind where your ball would be','Practice hitting the sand on the line — not the imaginary ball','Focus on a full follow-through and high finish','Once consistent, add a real ball and aim 2 inches behind it'],key:'90% of bunker failures come from hitting too far behind or too close to ball'},
+    {title:'No-ball bunker practice',time:'15 min',phase:'Phase 1–2',tags:['Bunker','Confidence'],steps:['Spend 5 minutes just splashing sand with no ball','Focus on entering the sand at the same spot every swing','Observe how much sand you\'re displacing — a divot the size of a dollar bill is ideal','Build muscle memory before adding the pressure of a ball'],key:'Getting comfortable with the feeling of hitting sand first removes the fear'},
+  ],
+  'Mental Game':[
+    {title:'Pre-shot routine lock-in',time:'5 min before each round',phase:'All phases',tags:['Mental','Routine'],steps:['Stand behind the ball and visualize the exact shot — trajectory, landing spot, roll','Take 2 slow diaphragmatic breaths (4 counts in, 4 out)','Walk into your address position with one practice swing only','Pull the trigger within 8 seconds of settling — no more dwelling'],key:'Your mindfulness background is your biggest golf advantage. Use it every shot'},
+    {title:'Shot reset ritual',time:'30 seconds after bad shots',phase:'All phases',tags:['Mental','Resilience'],steps:['After a bad shot: take one conscious breath','Say "next shot" out loud or in your head','Walk to the next shot with eyes forward — don\'t look back','Physically shake out your hands to release tension in grip'],key:'How you respond to the 3 bad shots per round determines your final score'},
+    {title:'Body scan between holes',time:'2 min',phase:'All phases',tags:['Mental','Tension'],steps:['While walking to next tee: scan from shoulders down to hands','Notice any grip tension — consciously soften to a "6 out of 10" hold','Check jaw and neck tightness — these telegraph into your swing','Arrive at the tee relaxed, not tight from the previous hole'],key:'Tension travels. One bad hole creates body tightness that ruins the next 3'},
+    {title:'Intention card',time:'5 min night before',phase:'All phases',tags:['Mental','Preparation'],steps:['The night before a round, write ONE process intention on a card','Examples: "commit to every club selection" or "full finish on every shot"','NOT a score goal — a behavior you control','Keep the card in your pocket and read it before each tee shot'],key:'Score goals create anxiety. Process goals create flow. You know this.'},
+  ],
+}
+const APPS_SCRIPT=`function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var data = JSON.parse(e.postData.contents);
+  var sheet = ss.getSheetByName(data.sheet);
+  if (!sheet) sheet = ss.insertSheet(data.sheet);
+  if (data.action === 'append') {
+    sheet.appendRow(data.row);
+  } else if (data.action === 'update') {
+    var col = data.keyCol || 1;
+    var rows = sheet.getDataRange().getValues();
+    for (var i = 1; i < rows.length; i++) {
+      if (String(rows[i][col-1]) === String(data.key)) {
+        data.row.forEach(function(v,j){ sheet.getRange(i+1,j+1).setValue(v); });
+        return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+    sheet.appendRow(data.row);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+}
+function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = e.parameter.sheet || 'weekly_log';
+  var sheet = ss.getSheetByName(sheetName);
+  if (!sheet) return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0]; var rows = [];
+  for (var i = 1; i < data.length; i++) {
+    var obj = {}; headers.forEach(function(h,j){ obj[h]=data[i][j]; }); rows.push(obj);
+  }
+  return ContentService.createTextOutput(JSON.stringify(rows)).setMimeType(ContentService.MimeType.JSON);
+}`
+
+let weekly=Array.from({length:12},(_,i)=>({week:i+1,score:'',hcp:'',gir:'',putts:'',triples:'',doubles:'',bogeys:'',pars:'',notes:''}))
+let sessions=[]
+let curWk=1
+let sheetUrl=localStorage.getItem('gt_sheet_url')||''
+let drillCat='Short Game'
+
+function phaseOf(w){for(const[s,l] of [[10,'Sustain'],[7,'Sharpen'],[4,'Build'],[1,'Foundation']])if(w>=s)return l}
+
+function go(tab,btn){
+  ['dash','log','drills','practice','milestones','setup'].forEach(t=>document.getElementById('p-'+t).style.display='none')
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'))
+  document.getElementById('p-'+tab).style.display=''
+  btn.classList.add('on')
+  if(tab==='dash')renderDash()
+  if(tab==='log')renderLog()
+  if(tab==='drills')renderDrills()
+  if(tab==='practice')renderPractice()
+  if(tab==='milestones')renderMS()
+  if(tab==='setup')renderSetup()
+}
+
+function renderDash(){
+  const rds=weekly.filter(w=>w.score)
+  document.getElementById('k-rds').textContent=rds.length
+  const sc=rds.map(r=>+r.score).filter(v=>v>0)
+  document.getElementById('k-best').textContent=sc.length?Math.min(...sc):'—'
+  document.getElementById('k-avg').textContent=sc.length?Math.round(sc.reduce((a,b)=>a+b)/sc.length):'—'
+  const pt=rds.map(r=>+r.putts).filter(v=>v>0)
+  document.getElementById('k-putts').textContent=pt.length?(pt.reduce((a,b)=>a+b)/pt.length).toFixed(1):'—'
+  const hcps=rds.filter(r=>r.hcp).map(r=>+r.hcp)
+  const lh=hcps.length?hcps[hcps.length-1].toFixed(1):'27.0'
+  document.getElementById('k-hcp').textContent=lh
+  document.getElementById('hcp-disp').textContent=lh
+  document.getElementById('k-sess').textContent=sessions.length
+  document.getElementById('week-rows').innerHTML=weekly.map(w=>`<div class="wrow"><div class="wn">WK${w.week}</div><div class="wg">${GOALS[w.week-1].substring(0,28)}…</div><div class="ws">${w.score||'—'}</div><div class="wst">${w.score?'✓':''}</div></div>`).join('')
+  const dist=rds.reduce((a,r)=>({triples:a.triples+(+r.triples||0),doubles:a.doubles+(+r.doubles||0),bogeys:a.bogeys+(+r.bogeys||0),pars:a.pars+(+r.pars||0),total:a.total+18}),{triples:0,doubles:0,bogeys:0,pars:0,total:0})
+  if(dist.total>0){
+    document.getElementById('dist-card').style.display=''
+    document.getElementById('dist-bars').innerHTML=[{l:'Pars+',v:dist.pars,c:'#4a8c5c'},{l:'Bogeys',v:dist.bogeys,c:'#c8a84b'},{l:'Doubles',v:dist.doubles,c:'#e67e22'},{l:'Triples+',v:dist.triples,c:'#c0392b'}].map(b=>{const p=Math.round((b.v/dist.total)*100);return`<div class="br"><div class="brl"><span>${b.l}</span><span class="brp">${p}%</span></div><div class="brt"><div class="brf" style="width:${p}%;background:${b.c}"></div></div></div>`}).join('')
+  }
+}
+
+function renderLog(){
+  const c=document.getElementById('wk-btns')
+  c.innerHTML=Array.from({length:12},(_,i)=>i+1).map(w=>`<button class="wkbtn${curWk===w?' on':''}" onclick="selWk(${w})">${w}${weekly.find(r=>r.week===w&&r.score)?'<span class="wkdot"></span>':''}</button>`).join('')
+  document.getElementById('phase-pill').textContent=`WK ${curWk} · ${phaseOf(curWk).toUpperCase()}`
+  document.getElementById('goal-txt').textContent=GOALS[curWk-1]
+  const wk=weekly.find(w=>w.week===curWk)||{}
+  ;['date','score','gir','putts','trp','dbl','bog','par','hcp','notes'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value=wk[k==='trp'?'triples':k==='dbl'?'doubles':k==='bog'?'bogeys':k==='par'?'pars':k]||''})
+}
+
+function selWk(w){curWk=w;renderLog()}
+
+function saveRound(){
+  const idx=weekly.findIndex(w=>w.week===curWk)
+  weekly[idx]={week:curWk,date:document.getElementById('f-date').value,score:document.getElementById('f-score').value,gir:document.getElementById('f-gir').value,putts:document.getElementById('f-putts').value,triples:document.getElementById('f-trp').value,doubles:document.getElementById('f-dbl').value,bogeys:document.getElementById('f-bog').value,pars:document.getElementById('f-par').value,hcp:document.getElementById('f-hcp').value,notes:document.getElementById('f-notes').value}
+  const btn=document.getElementById('save-round-btn')
+  if(sheetUrl){
+    btn.textContent='Syncing to Sheet…';btn.classList.add('syncing')
+    syncToSheet('weekly_log',weekly[idx]).then(()=>{
+      btn.textContent='✓ Saved to Sheet';setTimeout(()=>{btn.textContent='⛳ Save round';btn.classList.remove('syncing')},2000)
+      setSyncStatus(true)
+    }).catch(()=>{btn.textContent='⛳ Save round (local)';btn.classList.remove('syncing')})
+  } else {
+    btn.textContent='✓ Saved locally'
+    setTimeout(()=>{btn.textContent='⛳ Save round'},1800)
+  }
+  renderLog();renderDash()
+}
+
+function renderDrills(){
+  const cats=Object.keys(DRILLS).filter(k=>DRILLS[k].length>0)
+  document.getElementById('drill-cat-tabs').innerHTML=cats.map(c=>`<button class="dtab${drillCat===c?' on':''}" onclick="setDrillCat('${c}')">${c}</button>`).join('')
+  const list=DRILLS[drillCat]||[]
+  document.getElementById('drill-list').innerHTML=list.map(d=>`<div class="dcard">
+    <div class="dtitle">${d.title}</div>
+    <div class="dmeta">
+      <span class="dtag" style="background:rgba(74,140,92,0.2);color:#7ab88a">${d.time}</span>
+      <span class="dtag" style="background:rgba(200,168,75,0.15);color:#c8a84b">${d.phase}</span>
+      ${d.tags.map(t=>`<span class="dtag" style="background:rgba(255,255,255,0.06);color:#8a8a8a">${t}</span>`).join('')}
+    </div>
+    <ul class="dsteps">${d.steps.map(s=>`<li class="dstep">${s}</li>`).join('')}</ul>
+    <div class="dkey">Key: ${d.key}</div>
+  </div>`).join('')
+}
+
+function setDrillCat(c){drillCat=c;renderDrills()}
+
+function renderPractice(){
+  const counts=['Short Game','Putting','Full Swing','Bunker','Course Round'].reduce((a,f)=>({...a,[f]:sessions.filter(s=>s.focus===f).length}),{})
+  if(!sessions.length){document.getElementById('sess-hist').innerHTML='<div style="font-size:12px;color:#8a8a8a;text-align:center;padding:20px">No sessions yet. Get out there!</div>';return}
+  document.getElementById('sess-hist').innerHTML='<div class="ct" style="color:#fefefe;margin-bottom:10px">Session history</div>'+[...sessions].reverse().map(s=>`<div class="scard"><div class="smeta"><span class="stag">${s.focus.toUpperCase()}</span><span style="font-size:8px;color:#8a8a8a">WK ${s.week}</span>${s.dur?`<span style="font-size:8px;color:#7ab88a">${s.dur}min</span>`:''}</div>${s.loc?`<div style="font-size:11px;color:#f5f0e8">${s.loc}</div>`:''} ${s.notes?`<div style="font-size:10px;color:#8a8a8a;font-style:italic">${s.notes}</div>`:''}</div>`).join('')
+}
+
+function saveSess(){
+  const s={id:Date.now(),week:curWk,focus:document.getElementById('p-focus').value,dur:document.getElementById('p-dur').value,loc:document.getElementById('p-loc').value,drills:document.getElementById('p-drills').value,notes:document.getElementById('p-notes').value}
+  sessions.push(s)
+  const btn=document.getElementById('save-sess-btn')
+  if(sheetUrl){
+    btn.textContent='Syncing…';btn.classList.add('syncing')
+    syncToSheet('practice_log',s).then(()=>{btn.textContent='✓ Saved to Sheet';setTimeout(()=>{btn.textContent='🏌️ Log session';btn.classList.remove('syncing')},2000)}).catch(()=>{btn.classList.remove('syncing');btn.textContent='🏌️ Log session'})
+  } else {
+    btn.textContent='✓ Saved';setTimeout(()=>{btn.textContent='🏌️ Log session'},1800)
+  }
+  ;['p-dur','p-loc','p-drills','p-notes'].forEach(id=>{document.getElementById(id).value=''})
+  document.getElementById('k-sess').textContent=sessions.length
+  renderPractice()
+}
+
+function renderMS(){
+  const lh=weekly.filter(w=>w.hcp).map(w=>+w.hcp).slice(-1)[0]||27
+  const bs=Math.min(...weekly.filter(w=>w.score).map(w=>+w.score).filter(v=>v>0),Infinity)
+  const checks=[true,lh<=24,lh<=22,lh<=19,bs<=90,lh<=16]
+  document.getElementById('ms-list').innerHTML=MS_DATA.map((m,i)=>`<div class="ms${checks[i]?' done':''}"><div class="mhcp" style="color:${checks[i]?'#e8c96a':'#8a8a8a'}">${m.hcp}</div><div><div class="ml">${m.label}</div><div class="msub">${m.sub}</div></div><div style="font-size:16px;text-align:center">${checks[i]?'✅':'○'}</div></div>`).join('')
+}
+
+function renderSetup(){
+  document.getElementById('sheet-url').value=sheetUrl
+  document.getElementById('mode-disp').textContent=sheetUrl?'Google Sheets connected':'Local only (no Sheet connected)'
+  document.getElementById('sync-rounds').textContent=weekly.filter(w=>w.score).length
+  document.getElementById('sync-sess').textContent=sessions.length
+  setSyncStatus(!!sheetUrl)
+}
+
+function setSyncStatus(connected){
+  const dot=document.getElementById('sync-dot')
+  document.getElementById('sync-lbl').textContent=connected?'SYNCED TO SHEET':'LOCAL'
+  dot.style.background=connected?'#4a8c5c':'#c8a84b'
+}
+
+async function syncToSheet(sheetName,data){
+  if(!sheetUrl)return
+  const row=Object.values(data)
+  await fetch(sheetUrl,{method:'POST',body:JSON.stringify({sheet:sheetName,action:'update',key:data.week||data.id,keyCol:1,row}),headers:{'Content-Type':'text/plain'}})
+}
+
+function connectSheet(){
+  const url=document.getElementById('sheet-url').value.trim()
+  if(!url){document.getElementById('connect-status').textContent='Please paste your Apps Script URL';return}
+  sheetUrl=url
+  localStorage.setItem('gt_sheet_url',url)
+  document.getElementById('connect-status').textContent='✓ Connected! Future saves will sync to your Sheet.'
+  setSyncStatus(true)
+  renderSetup()
+}
+
+function copyScript(){
+  navigator.clipboard&&navigator.clipboard.writeText(APPS_SCRIPT).then(()=>{
+    document.getElementById('copy-lbl').textContent='✓ COPIED TO CLIPBOARD'
+    setTimeout(()=>{document.getElementById('copy-lbl').textContent='TAP TO COPY APPS SCRIPT CODE'},2000)
+  })
+}
+
+renderDash()
+</script>
